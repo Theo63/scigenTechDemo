@@ -1,0 +1,50 @@
+.floating-search-container {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    z-index: 1000;
+}
+
+.floating-search-input {
+    padding: 0.75rem 1rem;
+    border: 2px solid #007bff;
+    border-radius: 2rem;
+    font-size: 1.5rem;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    transition: all 1s ease;
+}
+
+.floating-search-input:focus {
+    outline: none;
+    border-color: #0056b3;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+    
+}
+
+.floating-search-button {
+    width: 5rem;
+    height: 5rem;
+    border-radius: 50%;
+    border: none;
+    background: #007bff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.floating-search-button:hover {
+    transform: scale(1.05);
+    background: #0056b3;
+}
+
+.floating-search-button img {
+    width: 3rem;
+    height: 3rem;
+    filter: brightness(0) invert(1); /* Makes the icon white */
+}
