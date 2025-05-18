@@ -17,7 +17,7 @@ export default function FloatingSearch({searchResults}) {
                     throw new Error(`Search failed (${response.status})`);
                 }
                 const data = await response.json();
-                searchResults(data);             // this ref will be lifted to the parent component
+                searchResults(data);             // calling parent component function to pass search results
                 // console.log('Search results:', data);
                 setIsPressed(false);
             } catch (error) {
@@ -27,8 +27,7 @@ export default function FloatingSearch({searchResults}) {
     };
 
     const handleButtonClick = () => {
-        setIsPressed(true);
-        // Focus input after render
+        setIsPressed(true);                     // Focus input after render
         
     };
 

@@ -41,17 +41,8 @@ const searchSpeakers = async (req, res, next) => {
     }
 };
 
-const updateSpeaker = async (req, res, next) => {
-    try {
-        const name = await Speaker.update(req.params.id, req.body);
-        if (!name) {
-            return res.status(404).json({ message: 'Speaker not found' });
-        }
-        res.json(name);
-    } catch (error) {
-        next(error);
-    }
-};
+
+
 
 const deleteSpeaker = async (req, res, next) => {
     try {
@@ -69,6 +60,5 @@ module.exports = {
     createSpeaker,
     getAllSpeakers,
     searchSpeakers,
-    updateSpeaker,
     deleteSpeaker
 };

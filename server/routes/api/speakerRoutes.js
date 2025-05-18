@@ -6,11 +6,11 @@ const speakerController = require('../../controllers/speakerController');
 //    CRUD op erations for speakers
 router.post('/', speakerController.createSpeaker);   //create speaker
 
+
 router.get('/search', speakerController.searchSpeakers);
 
 router.get('/', speakerController.getAllSpeakers); // get all speakers
 
-// router.put('/:id', speakerController.updateSpeaker); // update speaker
 router.delete('/:id', speakerController.deleteSpeaker); // delete speaker
 
 

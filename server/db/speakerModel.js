@@ -29,7 +29,8 @@ class Speaker {
             ORDER BY date DESC
         `);
         const searchTerm = `%${name}%`;
-        return stmt.all(searchTerm); // Provide both parameters
+        return stmt.all(searchTerm); // excecute the query with the 
+                                    // searchterm in the ? placeholder
     } catch (error) {
         console.error('Search error:', error);
         throw new Error('Database search failed');

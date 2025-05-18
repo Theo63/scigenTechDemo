@@ -18,7 +18,7 @@ export default function RegisteredSpeakers({registrationFlag, searchResults, sho
             }
             setSpeakers(speakers.filter(speaker => speaker.id !== id));
         } catch (error) {
-            setError(error.message); // Store error message instead of error object
+            setError(error.message); 
         }
     };
 
@@ -32,7 +32,7 @@ export default function RegisteredSpeakers({registrationFlag, searchResults, sho
                 const data = await response.json();
                 setSpeakers(data);
             } catch (error) {
-                setError(error.message); // Store error message instead of error object
+                setError(error.message);            // Store error message instead of error object
             } finally {
                 setLoading(false);
             }
@@ -77,8 +77,9 @@ export default function RegisteredSpeakers({registrationFlag, searchResults, sho
         
         {searchResults && showSearchResults && (
                 <div className="search-result-overlay" onClick={onCloseSearch}>
-                    <div className="search-result-container" onClick={e => e.stopPropagation()}>
-                        
+                    <div className="search-result-container" onClick={e => e.stopPropagation()}> 
+                        {/* clicking the container will not trigger the 
+                        onCloseSearch because of the stopPropagation */}
                         {Array.isArray(searchResults) && searchResults.map(speaker => (
                             <div key={speaker.id} className="speaker-item">
                                 <h3>{speaker.name}</h3>

@@ -18,7 +18,8 @@ const [showSearchResults, setShowSearchResults] = useState(false);
   const handleSearchResults = (results) => {
     setSearchResults(results);
     // console.log('Search results:', results);
-    setShowSearchResults(true);
+    setShowSearchResults(true); //because we want to render the search 
+                                // results overlay on RegisteredSpeakers.jsx
   };
 
   return (
@@ -30,12 +31,16 @@ const [showSearchResults, setShowSearchResults] = useState(false);
       <RegisterForm registrationSuccess = {handleRegistrationFlag} />
       <h2>Registered Speakers</h2>
       <RegisteredSpeakers 
-        registrationFlag={registrationFlag}
-        searchResults={searchResults}
-        showSearchResults={showSearchResults}
-        onCloseSearch={() => setShowSearchResults(false)}
+        registrationFlag={registrationFlag} // re-fetch speakers after registration
+        
+        searchResults={searchResults} // pass search results to RegisteredSpeakers 
+        showSearchResults={showSearchResults} // pass showSearchResults state to trigger search results overlay
+        onCloseSearch={() => setShowSearchResults(false)} // a false preset callback
+                                    //  function to close search results when the 
+                                    // overlay is clicked anywhere
       />
-      <FloatingSearchIcon searchResults={handleSearchResults} />
+      <FloatingSearchIcon searchResults={handleSearchResults} //a function to get search results
+      />
     </>
   )
 }
