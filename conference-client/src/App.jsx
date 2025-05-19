@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import RegisterForm from './components/registerForm'
+import RegisterForm from './components/RegisterForm'
 import RegisteredSpeakers from './components/RegisteredSpeakers'
 import FloatingSearchIcon from './components/floatingSearch'
 import logo from './assets/logo.png'
