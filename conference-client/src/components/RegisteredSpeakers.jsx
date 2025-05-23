@@ -5,21 +5,27 @@ export default function RegisteredSpeakers({
 	speakers,
 	setSpeakers,
 	searchResults,
+	setSearchResults,
 	showSearchResults,
 	onCloseSearch,
 }) {
-
 	const [error, setError] = useState(null);
 
 	const handleSpeakerDelete = async (id) => {
 		try {
-			const response = await fetch(`http://localhost:4000/api/speakers/${id}`, {
-				method: "DELETE",
-			});
+			const response = await fetch(
+				`http://localhost:4000/api/speakers/${id}`,
+				{
+					method: "DELETE",
+				}
+			);
 			if (!response.ok) {
 				throw new Error(`Failed to delete speaker (${response.status})`);
 			}
-			setSpeakers(speakers.filter((speaker) => speaker.id !== id));
+			setSpeakers(speakers.filter((speaker) => speaker._id !== id));
+			setSearchResults(
+				searchResults.filter((speaker) => speaker._id !== id)
+			); // remove the deleted speaker from search results
 		} catch (error) {
 			setError(error.message);
 		}
@@ -35,7 +41,8 @@ export default function RegisteredSpeakers({
 					<p>No speakers registered yet.</p>
 				) : (
 					speakers.map((speaker) => (
-						<div key={speaker.id} className="speaker-item">
+						<div key={speaker._id} className="speaker-item">
+							{/*  key={speaker.id} for SQL and _id for mongo compatibility */}
 							<h3>{speaker.name}</h3>
 							<p>
 								<strong>Topic:</strong> {speaker.topic}
@@ -64,7 +71,7 @@ export default function RegisteredSpeakers({
 							)}
 							<button
 								type="button"
-								onClick={() => handleSpeakerDelete(speaker.id)}
+								onClick={() => handleSpeakerDelete(speaker._id)}
 								className="delete-button">
 								{" "}
 								Delete Speaker
@@ -83,7 +90,7 @@ export default function RegisteredSpeakers({
                         onCloseSearch because of the stopPropagation */}
 						{Array.isArray(searchResults) &&
 							searchResults.map((speaker) => (
-								<div key={speaker.id} className="speaker-item">
+								<div key={speaker._id} className="speaker-item">
 									<h3>{speaker.name}</h3>
 									<p>
 										<strong>Topic:</strong> {speaker.topic}
@@ -95,7 +102,8 @@ export default function RegisteredSpeakers({
 										<strong>Time:</strong> {speaker.time}
 									</p>
 									<p>
-										<strong>Duration:</strong> {speaker.duration} minutes
+										<strong>Duration:</strong> {speaker.duration}{" "}
+										minutes
 									</p>
 									<p>
 										<strong>Location:</strong> {speaker.location}
@@ -107,13 +115,16 @@ export default function RegisteredSpeakers({
 									)}
 									{speaker.description && (
 										<p>
-											<strong>Description:</strong> {speaker.description}
+											<strong>Description:</strong>{" "}
+											{speaker.description}
 										</p>
 									)}
 									<div>
 										<button
 											type="button"
-											onClick={() => handleSpeakerDelete(speaker.id)}
+											onClick={() =>
+												handleSpeakerDelete(speaker._id)
+											}
 											className="delete-button">
 											Delete Speaker
 										</button>

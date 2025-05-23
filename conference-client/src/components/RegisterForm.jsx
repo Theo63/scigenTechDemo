@@ -2,9 +2,10 @@ import { useState } from "react";
 import "../styles/registerForm.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import TimePicker from "react-time-picker";
-import "react-time-picker/dist/TimePicker.css";
-import "react-clock/dist/Clock.css";
+import { format } from "date-fns";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RegisterForm({ onRegistrationSuccess }) {
 	const [formData, setFormData] = useState({
@@ -13,13 +14,18 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 		email: "",
 		topic: "",
 		description: "",
-		date: "",
+		date: null,
 		time: "",
 		duration: "",
 		location: "",
+		dietOptions: "",
 	});
 
+	const locations = ["Kiosk 1", "Kiosk 2", "Kiosk 3"];
+
 	const handleSubmit = async (event) => {
+		//add toast message
+
 		event.preventDefault(); // Prevent the default behavior that refreshes the page and clears the form
 		try {
 			const response = await fetch("http://localhost:4000/api/speakers", {
@@ -33,11 +39,12 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 					email: formData.email,
 					topic: formData.topic,
 					description: formData.description,
-					date: formData.date.toISOString().split("T")[0], // Format date to YYYY-MM-DD
+					date: formData.date ? format(formData.date, "yyyy-MM-dd") : null, // Format the date to YYYY-MM-DD
 
 					time: formData.time,
 					duration: parseInt(formData.duration),
 					location: formData.location,
+					dietOptions: formData.dietOptions,
 				}),
 			});
 			if (!response.ok) {
@@ -46,6 +53,7 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 
 			const data = await response.json();
 			console.log("Success:", data);
+
 			onRegistrationSuccess(); //to update the registered speakers list
 			handleReset(); // Reset form after successful submission
 		} catch (error) {
@@ -103,7 +111,9 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 							id="bio"
 							name="bio"
 							value={formData.bio}
-							onChange={(event) => handleInputChange("bio", event.target.value)}
+							onChange={(event) =>
+								handleInputChange("bio", event.target.value)
+							}
 						/>
 					</div>
 
@@ -173,12 +183,14 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 						<label htmlFor="time" className="required">
 							Time
 						</label>
-						<TimePicker
-							onChange={(time) => handleInputChange("time", time)}
-							value={formData.time}
-							format="HH:mm"
+						<input
+							type="time"
 							id="time"
 							name="time"
+							value={formData.time}
+							onChange={(event) =>
+								handleInputChange("time", event.target.value)
+							}
 							required
 						/>
 					</div>
@@ -212,7 +224,7 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 						/>
 					</div>
 
-					<div className="form-element">
+					{/* <div className="form-element">
 						<label htmlFor="location">Location</label>
 						<input
 							type="text"
@@ -224,6 +236,25 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 							}
 							placeholder="Desired kiosk"
 						/>
+					</div> */}
+					<div className="form-checkbox">
+						<label htmlFor="location">Location</label>
+						{locations.map((option) => (
+							<div key={option}>
+								<label>
+									<input
+										type="checkbox"
+										name="location"
+										id="location"
+										value={option}
+										onChange={(event) =>
+											handleInputChange("location", option)
+										}
+									/>
+									{option}
+								</label>
+							</div>
+						))}
 					</div>
 				</div>
 
@@ -231,7 +262,10 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 					<button type="submit" className="submit-button">
 						Submit
 					</button>
-					<button type="button" className="reset-button" onClick={handleReset}>
+					<button
+						type="button"
+						className="reset-button"
+						onClick={handleReset}>
 						Reset form
 					</button>
 				</div>

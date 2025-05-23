@@ -6,7 +6,7 @@ import FloatingSearchIcon from "./components/floatingSearch";
 import logo from "./assets/logo.png";
 
 function App() {
-  const [loading, setLoading] = useState(true); 
+	const [loading, setLoading] = useState(true);
 
 	const [searchResults, setSearchResults] = useState([]);
 	const [showSearchResults, setShowSearchResults] = useState(false);
@@ -15,6 +15,7 @@ function App() {
 
 	const fetchSpeakers = async () => {
 		try {
+			setLoading(true);
 			const response = await fetch("http://localhost:4000/api/speakers");
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
@@ -52,6 +53,7 @@ function App() {
 				speakers={speakers}
 				setSpeakers={setSpeakers}
 				searchResults={searchResults} // pass search results to RegisteredSpeakers
+				setSearchResults={setSearchResults} // pass setSearchResults to RegisteredSpeakers
 				showSearchResults={showSearchResults} // pass showSearchResults state to trigger search results overlay
 				onCloseSearch={() => setShowSearchResults(false)} // a false preset callback
 				//  function to close search results when the
