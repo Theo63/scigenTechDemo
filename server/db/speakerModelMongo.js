@@ -1,12 +1,17 @@
 const mongoose = require("mongoose");
 
 const speakerSchema = new mongoose.Schema({
+	user: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: "User",
+		required: true,
+	},
+
 	// Define schemma from mongoose for no SQL db
 	name: {
 		type: String,
 		required: true,
 	},
-
 	bio: String,
 
 	email: {

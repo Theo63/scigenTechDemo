@@ -3,6 +3,7 @@ const cors = require("cors");
 const config = require("./config/config");
 const bodyParser = require("body-parser");
 const speakerRoutes = require("./routes/api/speakerRoutes");
+const userRoutes = require("./routes/api/userRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const connection = require("./config/mongoConfig");
 
@@ -22,6 +23,7 @@ app.use(bodyParser.json());
 
 // Routes
 app.use("/api/speakers", speakerRoutes); //this makes the full path
+app.use("/api/users", userRoutes);
 // localhost:4000/api/speakers and route paths after
 
 // Error handling

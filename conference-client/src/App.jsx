@@ -4,6 +4,7 @@ import RegisterForm from "./components/RegisterForm";
 import RegisteredSpeakers from "./components/RegisteredSpeakers";
 import FloatingSearchIcon from "./components/floatingSearch";
 import logo from "./assets/logo.png";
+import AuthForm from "./components/AuthForm";
 
 function App() {
 	const [loading, setLoading] = useState(true);
@@ -12,6 +13,8 @@ function App() {
 	const [showSearchResults, setShowSearchResults] = useState(false);
 
 	const [speakers, setSpeakers] = useState([]);
+
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
 	const fetchSpeakers = async () => {
 		try {
@@ -30,7 +33,13 @@ function App() {
 	};
 
 	useEffect(() => {
-		fetchSpeakers();
+		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
+		if (token) {
+			setIsAuthenticated(true);
+			fetchSpeakers(); // Fetch speakers if token is present
+		} else {
+			setIsAuthenticated(false);
+		}
 	}, []); //empty array means this effect runs once when the component mounts. if we want to run it on any state change, we can add the state variable to the array
 
 	const handleSearchResults = (results) => {
@@ -39,13 +48,31 @@ function App() {
 		setShowSearchResults(true); //because we want to render the search
 		// results overlay on RegisteredSpeakers.jsx
 	};
-	if (loading) return <div>Loading...</div>;
 
+	const handleLogout = () => {
+		localStorage.removeItem("token"); // Remove token from local storage
+		setIsAuthenticated(false);
+	};
+
+	const handleAuth = (token) => {
+		// Store token in local storage
+		localStorage.setItem("token", token); // local storage is used to store the token and it is stored in the browser
+		setIsAuthenticated(true);
+		fetchSpeakers(); // Fetch speakers after successful authentication
+	};
+
+	if (loading) return <div>Loading...</div>;
+	if (!isAuthenticated) {
+		return <AuthForm onAuthSuccess={handleAuth} />;
+	} //if the user is authenticated, we can show the speakers list
 	return (
 		<>
 			<div className="header">
 				<img src={logo} alt="Logo" className="logo" />
 				<h1>Speaker Registration</h1>
+				<button type="button" onClick={handleLogout}>
+					Logout
+				</button>
 			</div>
 			<RegisterForm onRegistrationSuccess={fetchSpeakers} />
 			<h2>Registered Speakers</h2>
