@@ -16,6 +16,17 @@ function App() {
 
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+	useEffect(() => {
+		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
+		if (token) {
+			setIsAuthenticated(true);
+			fetchSpeakers(); // Fetch speakers if token is present
+		} else {
+			setIsAuthenticated(false);
+			setLoading(false); // Set loading to false if no token is present
+		}
+	}, []); //empty array means this effect runs once when the component mounts. if we want to run it on any state change, we can add the state variable to the array
+
 	const fetchSpeakers = async () => {
 		try {
 			setLoading(true);
@@ -31,16 +42,6 @@ function App() {
 			setLoading(false);
 		}
 	};
-
-	useEffect(() => {
-		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
-		if (token) {
-			setIsAuthenticated(true);
-			fetchSpeakers(); // Fetch speakers if token is present
-		} else {
-			setIsAuthenticated(false);
-		}
-	}, []); //empty array means this effect runs once when the component mounts. if we want to run it on any state change, we can add the state variable to the array
 
 	const handleSearchResults = (results) => {
 		setSearchResults(results);
