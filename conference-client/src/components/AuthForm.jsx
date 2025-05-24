@@ -36,6 +36,8 @@ function AuthForm({ onAuthSuccess }) {
 			if (response.ok) {
 				const data = await response.json();
 				onAuthSuccess(data.token); // Pass the token to App component as token
+				localStorage.setItem("token", data.token); // Store token in local storage
+				localStorage.setItem("userName", data.name); // Store username in local storage
 			} else {
 				// Handle error
 				const errorData = await response.json();

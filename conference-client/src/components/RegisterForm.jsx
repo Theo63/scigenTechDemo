@@ -3,11 +3,12 @@ import "../styles/registerForm.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import { jwtDecode } from "jwt-decode";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export default function RegisterForm({ onRegistrationSuccess }) {
+export default function RegisterForm({ onRegistrationSuccess, userName }) {
 	const [formData, setFormData] = useState({
 		name: "",
 		bio: "",
@@ -18,7 +19,6 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 		time: "",
 		duration: "",
 		location: "",
-		dietOptions: "",
 	});
 
 	const locations = ["Kiosk 1", "Kiosk 2", "Kiosk 3"];
@@ -32,6 +32,7 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json", //!!!!!!!!!!!!!!!!!!!!!!
+					authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
 				},
 				body: JSON.stringify({
 					name: formData.name,
@@ -44,7 +45,6 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 					time: formData.time,
 					duration: parseInt(formData.duration),
 					location: formData.location,
-					dietOptions: formData.dietOptions,
 				}),
 			});
 			if (!response.ok) {
@@ -60,6 +60,7 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 			console.error("Error:", error);
 			// Here you might want to show an error message to the user
 		}
+
 		console.log(formData);
 	};
 
@@ -84,6 +85,9 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 
 	return (
 		<div className="form-card">
+			<div className="user-name">
+				<h2>Organizer: {userName}</h2>
+			</div>
 			<form onSubmit={handleSubmit}>
 				<div className="form-content">
 					<div className="form-element">

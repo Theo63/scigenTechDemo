@@ -1,65 +1,83 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+	max-width: 1280px;
+	margin: 0 auto;
+	padding: 2rem;
+	text-align: center;
 }
 
 .logo {
-  height: 50px;
-  width: auto;
-  height: 10em;
-  will-change: filter;
+	height: 50px;
+	width: auto;
+	height: 10em;
+	will-change: filter;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+	filter: drop-shadow(0 0 2em #646cffaa);
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+	filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+	a:nth-of-type(2) .logo {
+		animation: logo-spin infinite 20s linear;
+	}
 }
 
 .card {
-  padding: 2em;
+	padding: 2em;
 }
 
 .read-the-docs {
-  color: #888;
+	color: #888;
 }
-
 
 .header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: rgb(224, 219, 219);
-    color: #007bff;
-    padding: 2rem;
-    border-radius: 10px;
-    width: 100%;
-    max-width: 900px; /* Increased for 2 columns */
-    margin-bottom: 2rem ;
+	display: flex; /* Use flexbox to align items horizontally */
+	align-items: center; /* Vertically align items in the center */
+	justify-content: space-between; /* Distribute items evenly with space in between */
+	gap: 1rem;
+	background: rgb(224, 219, 219);
+	color: #007bff;
+	padding: 2rem;
+	border-radius: 10px;
+	width: 100%;
+	max-width: 900px; /* Increased for 2 columns */
+	margin-bottom: 2rem;
 }
 
+h1 {
+	color: #007bff;
+	font-size: 3rem;
+	margin-bottom: 2rem; /* Remove bottom margin */
+	margin-right: 2rem; /* Add right margin for spacing */
+	margin-left: 2rem;
+	font-weight: 800;
+	white-space: nowrap; /* Prevent text from wrapping */
+}
 
 h2 {
-  color: #007bff;
-  font-size: 2rem;
-  margin-bottom: 1rem;
-  font-weight: 800;
-  margin-top: 4rem;
+	color: #007bff;
+	font-size: 2rem;
+	margin-bottom: 1rem;
+	font-weight: 800;
+	margin-top: 4rem;
+}
+
+.logout-button {
+	background-color: transparent; /* Make the background transparent */
+	border: none; /* Remove the border */
+	cursor: pointer;
+}
+.logout-button img {
+	height: 4em; /* Adjust the height of the logout icon */
 }

@@ -22,6 +22,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 // Routes
+console.log("Setting up routes");
 app.use("/api/speakers", speakerRoutes); //this makes the full path
 app.use("/api/users", userRoutes);
 // localhost:4000/api/speakers and route paths after

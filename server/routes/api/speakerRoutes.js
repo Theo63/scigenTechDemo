@@ -6,12 +6,13 @@ const { protect } = require("../../middleware/authMiddleware");
 
 //API route is the endpoint that the client app access the server's resources.
 //    CRUD op erations for speakers
-router.post("/", speakerController.createSpeaker); //create speaker
+console.log("Speaker routes loaded");
+router.post("/", protect, speakerController.createSpeaker); //create speaker
 
-router.get("/search", speakerController.searchSpeakers);
+router.get("/search", protect, speakerController.searchSpeakers);
 
-router.get("/", speakerController.getAllSpeakers); // get all speakers
+router.get("/", protect, speakerController.getAllSpeakers); // get all speakers
 
-router.delete("/:id", speakerController.deleteSpeaker); // delete speaker
+router.delete("/:id", protect, speakerController.deleteSpeaker); // delete speaker
 
 module.exports = router;

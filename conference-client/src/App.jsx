@@ -4,6 +4,7 @@ import RegisterForm from "./components/RegisterForm";
 import RegisteredSpeakers from "./components/RegisteredSpeakers";
 import FloatingSearchIcon from "./components/floatingSearch";
 import logo from "./assets/logo.png";
+import logoutIcon from "./assets/logout.png";
 import AuthForm from "./components/AuthForm";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
 	const [speakers, setSpeakers] = useState([]);
 
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const userName = localStorage.getItem("userName") || ""; // Retrieve username from local storage
 
 	useEffect(() => {
 		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
@@ -25,12 +27,17 @@ function App() {
 			setIsAuthenticated(false);
 			setLoading(false); // Set loading to false if no token is present
 		}
-	}, []); //empty array means this effect runs once when the component mounts. if we want to run it on any state change, we can add the state variable to the array
+	}, [isAuthenticated]); // useEffect to check if the user is authenticated and fetch speakers !!!!!!!!!!!!!!!
 
 	const fetchSpeakers = async () => {
 		try {
 			setLoading(true);
-			const response = await fetch("http://localhost:4000/api/speakers");
+			const response = await fetch("http://localhost:4000/api/speakers", {
+				method: "GET",
+				headers: {
+					authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
+				},
+			});
 			if (!response.ok) {
 				throw new Error(`HTTP error! status: ${response.status}`);
 			}
@@ -56,40 +63,40 @@ function App() {
 	};
 
 	const handleAuth = (token) => {
-		// Store token in local storage
-		localStorage.setItem("token", token); // local storage is used to store the token and it is stored in the browser
 		setIsAuthenticated(true);
-		fetchSpeakers(); // Fetch speakers after successful authentication
 	};
 
 	if (loading) return <div>Loading...</div>;
 	if (!isAuthenticated) {
 		return <AuthForm onAuthSuccess={handleAuth} />;
-	} //if the user is authenticated, we can show the speakers list
+	}
+
 	return (
 		<>
 			<div className="header">
 				<img src={logo} alt="Logo" className="logo" />
 				<h1>Speaker Registration</h1>
-				<button type="button" onClick={handleLogout}>
-					Logout
+				<button
+					className="logout-button"
+					type="button"
+					onClick={handleLogout}>
+					<img src={logoutIcon} alt="Logout" />
 				</button>
 			</div>
-			<RegisterForm onRegistrationSuccess={fetchSpeakers} />
+			<RegisterForm
+				onRegistrationSuccess={fetchSpeakers}
+				userName={userName}
+			/>
 			<h2>Registered Speakers</h2>
 			<RegisteredSpeakers
 				speakers={speakers}
 				setSpeakers={setSpeakers}
-				searchResults={searchResults} // pass search results to RegisteredSpeakers
-				setSearchResults={setSearchResults} // pass setSearchResults to RegisteredSpeakers
-				showSearchResults={showSearchResults} // pass showSearchResults state to trigger search results overlay
-				onCloseSearch={() => setShowSearchResults(false)} // a false preset callback
-				//  function to close search results when the
-				// overlay is clicked anywhere
+				searchResults={searchResults}
+				setSearchResults={setSearchResults}
+				showSearchResults={showSearchResults}
+				onCloseSearch={() => setShowSearchResults(false)}
 			/>
-			<FloatingSearchIcon
-				searchResults={handleSearchResults} //a function to get search results
-			/>
+			<FloatingSearchIcon searchResults={handleSearchResults} />
 		</>
 	);
 }

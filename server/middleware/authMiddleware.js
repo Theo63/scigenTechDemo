@@ -4,7 +4,7 @@ const User = require("../db/userModel");
 
 const protect = async (req, res, next) => {
 	let token;
-
+	console.log("Protect middleware called");
 	if (
 		req.headers.authorization &&
 		req.headers.authorization.startsWith("Bearer")

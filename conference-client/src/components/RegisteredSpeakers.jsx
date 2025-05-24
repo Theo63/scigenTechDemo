@@ -16,6 +16,9 @@ export default function RegisteredSpeakers({
 			const response = await fetch(
 				`http://localhost:4000/api/speakers/${id}`,
 				{
+					headers: {
+						authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
+					},
 					method: "DELETE",
 				}
 			);

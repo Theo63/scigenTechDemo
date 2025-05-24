@@ -4,7 +4,11 @@ const Speaker = require("../db/speakerModelMongo");
 //  requests from the api endpoint
 const createSpeaker = async (req, res) => {
 	try {
-		const speaker = await Speaker.create(req.body);
+		const speakerData = {
+			...req.body,
+			user: req.user._id, // Ensure the user field is set to the current user's ID
+		};
+		const speaker = await Speaker.create(speakerData);
 		res.status(201).json(speaker);
 	} catch (error) {
 		console.error("Error creating speaker:", error);
@@ -13,8 +17,13 @@ const createSpeaker = async (req, res) => {
 };
 
 const getAllSpeakers = async (req, res, next) => {
+	console.log("Fetching all speakers");
+	console.log("User ID from request:", req.user); // Log the userId for debugging
 	try {
-		const speakers = await Speaker.find().sort({ date: -1 }); //we do the sorting here because we dont have SQL at schema level
+		const user = req.user; // we get the user id from the request object, which is set by the auth middleware
+		const speakers = await Speaker.find({ user }).sort({
+			date: -1,
+		});
 		res.json(speakers);
 	} catch (error) {
 		// res.status(500).json({error: error.message});  this the way to handle error without middleware
@@ -24,8 +33,9 @@ const getAllSpeakers = async (req, res, next) => {
 
 const searchSpeakers = async (req, res, next) => {
 	try {
+		const user = req.user;
 		const { name } = req.query;
-		// console.log('Search term:', name);
+		console.log("Search term:", name);
 		if (!name) {
 			return res.status(400).json({
 				message: "Search term is required", //we requre a search term to search
@@ -33,6 +43,7 @@ const searchSpeakers = async (req, res, next) => {
 		}
 		const speaker = await Speaker.find({
 			name: { $regex: name, $options: "i" }, //$regex enables regular expression matching
+			user: user._id, // Ensure the search is scoped to the current user
 			//$options: 'i' makes the search case-insensitive
 		}).sort({ date: -1 });
 
