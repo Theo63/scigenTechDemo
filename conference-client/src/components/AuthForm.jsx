@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "../styles/authForm.css"; // Import your CSS styles
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "../styles/authForm.css"; // Import your CSS styles
 
 function AuthForm({ onAuthSuccess }) {
 	const [isLogin, setIsLogin] = useState(true); // Track whether it's login or signup
@@ -34,10 +35,15 @@ function AuthForm({ onAuthSuccess }) {
 
 			if (response.ok) {
 				const data = await response.json();
-				onAuthSuccess(data.token); // Pass the token to App component
+				onAuthSuccess(data.token); // Pass the token to App component as token
 			} else {
 				// Handle error
-				console.error("Authentication failed");
+				const errorData = await response.json();
+				toast(
+					errorData.message ||
+						"Authentication failed. Please check your credentials."
+				);
+				console.error("Authentication failed:", errorData);
 			}
 		} catch (error) {
 			console.error("Error:", error);
@@ -48,40 +54,52 @@ function AuthForm({ onAuthSuccess }) {
 		<div>
 			<h2>{isLogin ? "Login" : "Sign Up"}</h2>
 			<form onSubmit={handleSubmit}>
-				{!isLogin && (
+				<div className="login-container">
+					{!isLogin && (
+						<input
+							type="text"
+							name="name"
+							placeholder="Name"
+							value={formData.name}
+							onChange={(event) =>
+								handleInputChange("name", event.target.value)
+							}
+						/>
+					)}
 					<input
-						type="text"
-						name="name"
-						placeholder="Name"
-						value={formData.name}
+						type="email"
+						name="email"
+						placeholder="Email"
+						value={formData.email}
 						onChange={(event) =>
-							handleInputChange("name", event.target.value)
+							handleInputChange("email", event.target.value)
 						}
 					/>
-				)}
-				<input
-					type="email"
-					name="email"
-					placeholder="Email"
-					value={formData.email}
-					onChange={(event) =>
-						handleInputChange("email", event.target.value)
-					}
-				/>
-				<input
-					type="password"
-					name="password"
-					placeholder="Password"
-					value={formData.password}
-					onChange={(event) =>
-						handleInputChange("password", event.target.value)
-					}
-				/>
-				<button type="submit">{isLogin ? "Login" : "Sign Up"}</button>
+					<input
+						type="password"
+						name="password"
+						placeholder="Password"
+						value={formData.password}
+						onChange={(event) =>
+							handleInputChange("password", event.target.value)
+						}
+					/>
+					<button className="login-button" type="submit">
+						{isLogin ? "Login" : "Sign Up"}
+					</button>
+				</div>
 			</form>
-			<button onClick={() => setIsLogin(!isLogin)}>
-				Switch to {isLogin ? "Sign Up" : "Login"}
+			<button className="login-button" onClick={() => setIsLogin(!isLogin)}>
+				or {isLogin ? "Sign Up" : "Login"}
 			</button>
+			<ToastContainer
+				position="top-center"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				theme="light"
+			/>
 		</div>
 	);
 }
