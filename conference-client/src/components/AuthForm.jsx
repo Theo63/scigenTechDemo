@@ -3,6 +3,7 @@ import "../styles/authForm.css"; // Import your CSS styles
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/authForm.css"; // Import your CSS styles
+import { useGlobalContext } from "../utilities/globalContex";
 
 function AuthForm({ onAuthSuccess }) {
 	const [isLogin, setIsLogin] = useState(true); // Track whether it's login or signup
@@ -11,6 +12,7 @@ function AuthForm({ onAuthSuccess }) {
 		email: "",
 		password: "",
 	}); //these are the fields we need to send to the server and match with the user model
+	const { userDetails, setUserDetails } = useGlobalContext(); // Global context to store user details
 
 	const handleInputChange = (identifier, value) => {
 		setFormData({
@@ -38,6 +40,11 @@ function AuthForm({ onAuthSuccess }) {
 				onAuthSuccess(data.token); // Pass the token to App component as token
 				localStorage.setItem("token", data.token); // Store token in local storage
 				localStorage.setItem("userName", data.name); // Store username in local storage
+				setUserDetails({
+					userName: data.name,
+					mail: data.email,
+					role: data.role,
+				}); //global context store
 			} else {
 				// Handle error
 				const errorData = await response.json();

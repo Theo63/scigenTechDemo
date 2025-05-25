@@ -48,6 +48,9 @@ export default function RegisteredSpeakers({
 							{/*  key={speaker.id} for SQL and _id for mongo compatibility */}
 							<h3>{speaker.name}</h3>
 							<p>
+								<strong>Email:</strong> {speaker.email}
+							</p>
+							<p>
 								<strong>Topic:</strong> {speaker.topic}
 							</p>
 							<p>
@@ -60,18 +63,15 @@ export default function RegisteredSpeakers({
 								<strong>Duration:</strong> {speaker.duration} minutes
 							</p>
 							<p>
+								<strong>Bio:</strong> {speaker.bio}
+							</p>
+							<p>
+								<strong>Description:</strong> {speaker.description}
+							</p>
+							<p>
 								<strong>Location:</strong> {speaker.location}
 							</p>
-							{speaker.bio && (
-								<p>
-									<strong>Bio:</strong> {speaker.bio}
-								</p>
-							)}
-							{speaker.description && (
-								<p>
-									<strong>Description:</strong> {speaker.description}
-								</p>
-							)}
+
 							<button
 								type="button"
 								onClick={() => handleSpeakerDelete(speaker._id)}

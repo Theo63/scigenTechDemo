@@ -16,7 +16,6 @@ function App() {
 	const [speakers, setSpeakers] = useState([]);
 
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
-	const userName = localStorage.getItem("userName") || ""; // Retrieve username from local storage
 
 	useEffect(() => {
 		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
@@ -83,10 +82,7 @@ function App() {
 					<img src={logoutIcon} alt="Logout" />
 				</button>
 			</div>
-			<RegisterForm
-				onRegistrationSuccess={fetchSpeakers}
-				userName={userName}
-			/>
+			<RegisterForm onRegistrationSuccess={fetchSpeakers} />
 			<h2>Registered Speakers</h2>
 			<RegisteredSpeakers
 				speakers={speakers}

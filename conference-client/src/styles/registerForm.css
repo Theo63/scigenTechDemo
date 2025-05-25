@@ -192,11 +192,18 @@ input[type="number"] {
 /* Update the user-name styling */
 .user-name {
 	margin-bottom: 1.5rem; /* Add space below the user name */
-	margin-top: -1rem; /* Move it upward */
+	margin-top: -3rem; /* Move it upward */
 }
 
 .user-name h2 {
 	color: #555; /* Adjust this to match your form label color */
 	font-size: 2rem; /* Slightly smaller size if needed */
 	font-weight: 800; /* Less bold for better consistency with labels */
+}
+.user-name h3 {
+	color: #555; /* Adjust this to match your form label color */
+	font-size: 1rem; /* Slightly smaller size if needed */
+	font-weight: 800; /* Less bold for better consistency with labels */
+	text-align: center;
+	margin-bottom: -1rem;
 }
