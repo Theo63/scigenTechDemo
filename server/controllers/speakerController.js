@@ -22,6 +22,7 @@ const getAllSpeakers = async (req, res, next) => {
 	try {
 		const user = req.user; // we get the user id from the request object, which is set by the auth middleware
 		let speakers;
+		// admin functionality added
 		if (user.role !== "admin") {
 			speakers = await Speaker.find({ user }).sort({
 				date: -1,
@@ -47,6 +48,7 @@ const searchSpeakers = async (req, res, next) => {
 				message: "Search term is required", //we requre a search term to search
 			});
 		}
+		//admin funtionality in search added
 		if (user.role !== "admin") {
 			speaker = await Speaker.find({
 				name: { $regex: name, $options: "i" }, //$regex enables regular expression matching

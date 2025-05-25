@@ -3,11 +3,6 @@ import "../styles/registerForm.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
-import { jwtDecode } from "jwt-decode";
-
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { useGlobalContext } from "../utilities/globalContex";
 
 export default function RegisterForm({ onRegistrationSuccess }) {
 	const [formData, setFormData] = useState({
@@ -21,7 +16,6 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 		duration: "",
 		location: "",
 	});
-	const { userDetails } = useGlobalContext(); // Global context to store user details
 
 	const locations = ["Kiosk 1", "Kiosk 2", "Kiosk 3"];
 
@@ -88,9 +82,9 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 	return (
 		<div className="form-card">
 			<div className="user-name">
-				<h2>Organizer: {userDetails.userName}</h2>
-				<h3>Email: {userDetails.mail}</h3>
-				<h3>Role: {userDetails.role}</h3>
+				<h2>Organizer: {localStorage.getItem("userName")}</h2>
+				<h3>Email: {localStorage.getItem("userEmail")}</h3>
+				<h3>Role: {localStorage.getItem("userRole")}</h3>
 			</div>
 			<form onSubmit={handleSubmit}>
 				<div className="form-content">

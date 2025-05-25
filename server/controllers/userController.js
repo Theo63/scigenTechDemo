@@ -33,27 +33,23 @@ const registerUser = async (req, res) => {
 			role: role || "user", // Default to 'user' if no role is provided
 		});
 		if (newUser) {
-			return res.status(201).json({
-				_id: newUser.id,
-				name: newUser.name,
-				email: newUser.email,
-				role: newUser.role,
-				token: tokenGenerator(newUser._id),
-				message: "User created successfully",
-			});
+			return res
+				.status(201)
+				.json({
+					_id: newUser.id,
+					name: newUser.name,
+					email: newUser.email,
+					role: newUser.role,
+					token: tokenGenerator(newUser._id),
+					message: "User created successfully",
+				})
+				.setHeader(
+					"authorization",
+					`Bearer ${tokenGenerator(newUser._id)}`
+				);
 		} else {
 			return res.status(400).json({ message: "User did not registered " });
 		}
-		// // Generate JWT token
-		// const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-		// 	expiresIn: "1h",
-		// });
-
-		// // Set token in response header
-		// res.setHeader("Authorization", `Bearer ${token}`);
-		// // Send response
-
-		res.json({ message: "User registered successfully" });
 	} catch (error) {
 		console.error("Error registering user:", error);
 		res.status(500).json({ message: "Server error" });

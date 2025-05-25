@@ -18,7 +18,8 @@ const protect = async (req, res, next) => {
 
 			// Get user from the token
 			req.user = await User.findById(decoded.id).select("-password");
-			//Assigns the retrieved user object to the req.user property. This is a common convention for making user data accessible in later middleware or route handlers.
+			//Assigns the retrieved user object to the req.user property.
+			// making user data accessible in later middleware or route handlers.
 			console.log("User from token:", req.user);
 			next();
 		} catch (error) {
