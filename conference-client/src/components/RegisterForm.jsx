@@ -4,7 +4,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 
-export default function RegisterForm({ onRegistrationSuccess }) {
+const RegisterForm = ({ onRegistrationSuccess }) => {
 	const [formData, setFormData] = useState({
 		name: "",
 		bio: "",
@@ -274,4 +274,5 @@ export default function RegisterForm({ onRegistrationSuccess }) {
 			</form>
 		</div>
 	);
-}
+};
+export default RegisterForm; //ES6 export syntax

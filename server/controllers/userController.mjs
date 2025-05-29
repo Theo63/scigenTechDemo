@@ -1,9 +1,9 @@
 // @desc Register a new user
 // @route POST /api/users/register
 // @access Public
-const jwt = require("jsonwebtoken");
-const User = require("../db/userModel");
-const bcrypt = require("bcryptjs");
+import jwt from "jsonwebtoken";
+import User from "../db/userModel.mjs";
+import bcrypt from "bcryptjs";
 
 const tokenGenerator = (id) => {
 	return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -35,6 +35,7 @@ const registerUser = async (req, res) => {
 		if (newUser) {
 			return res
 				.status(201)
+				.setHeader("authorization", `Bearer ${tokenGenerator(newUser._id)}`)
 				.json({
 					_id: newUser.id,
 					name: newUser.name,
@@ -42,11 +43,7 @@ const registerUser = async (req, res) => {
 					role: newUser.role,
 					token: tokenGenerator(newUser._id),
 					message: "User created successfully",
-				})
-				.setHeader(
-					"authorization",
-					`Bearer ${tokenGenerator(newUser._id)}`
-				);
+				});
 		} else {
 			return res.status(400).json({ message: "User did not registered " });
 		}
@@ -102,8 +99,4 @@ const getUserProfile = async (req, res) => {
 	}
 };
 
-module.exports = {
-	registerUser,
-	loginUser,
-	getUserProfile,
-};
+export { registerUser, loginUser, getUserProfile };

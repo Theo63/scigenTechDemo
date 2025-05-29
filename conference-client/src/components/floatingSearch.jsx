@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import "../styles/floatingButton.css";
 import searchIcon from "../assets/search.png";
 
-export default function FloatingSearch({ searchResults }) {
+const FloatingSearch = ({ searchResults }) => {
 	const [isPressed, setIsPressed] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 
@@ -61,4 +61,6 @@ export default function FloatingSearch({ searchResults }) {
 			</button>
 		</div>
 	);
-}
+};
+
+export default FloatingSearch;

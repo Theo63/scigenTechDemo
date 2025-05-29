@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import "../styles/registeredSpeakers.css";
 
-export default function RegisteredSpeakers({
+const RegisteredSpeakers = ({
 	speakers,
 	setSpeakers,
 	searchResults,
 	setSearchResults,
 	showSearchResults,
 	onCloseSearch,
-}) {
+}) => {
 	const [error, setError] = useState(null);
 
 	const handleSpeakerDelete = async (id) => {
@@ -144,4 +144,5 @@ export default function RegisteredSpeakers({
 			)}
 		</>
 	);
-}
+};
+export default RegisteredSpeakers;

@@ -1,4 +1,4 @@
-const Speaker = require("../db/speakerModelMongo");
+import Speaker from "../db/speakerModelMongo.mjs";
 
 // Controller functions for handling
 //  requests from the api endpoint
@@ -24,7 +24,7 @@ const getAllSpeakers = async (req, res, next) => {
 		let speakers;
 		// admin functionality added
 		if (user.role !== "admin") {
-			speakers = await Speaker.find({ user }).sort({
+			speakers = await Speaker.find({ user: req.user._id }).sort({
 				date: -1,
 			});
 		} else {
@@ -80,9 +80,4 @@ const deleteSpeaker = async (req, res, next) => {
 	}
 };
 
-module.exports = {
-	createSpeaker,
-	getAllSpeakers,
-	searchSpeakers,
-	deleteSpeaker,
-};
+export { createSpeaker, getAllSpeakers, searchSpeakers, deleteSpeaker };

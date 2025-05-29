@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/authForm.css"; // Import your CSS styles
 
-function AuthForm({ onAuthSuccess }) {
+const AuthForm = ({ onAuthSuccess }) => {
 	const [isLogin, setIsLogin] = useState(true); // Track whether it's login or signup
 	const [formData, setFormData] = useState({
 		name: "",
@@ -111,6 +111,6 @@ function AuthForm({ onAuthSuccess }) {
 			/>
 		</div>
 	);
-}
+};
 
 export default AuthForm;

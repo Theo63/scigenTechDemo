@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const speakerSchema = new mongoose.Schema({
 	user: {
@@ -41,4 +41,4 @@ const speakerSchema = new mongoose.Schema({
 	location: String,
 });
 
-module.exports = mongoose.model("Speaker", speakerSchema);
+export default mongoose.model("Speaker", speakerSchema);

@@ -7,7 +7,7 @@ import logo from "./assets/logo.png";
 import logoutIcon from "./assets/logout.png";
 import AuthForm from "./components/AuthForm";
 
-function App() {
+const App = () => {
 	const [loading, setLoading] = useState(true);
 
 	const [searchResults, setSearchResults] = useState([]);
@@ -95,6 +95,6 @@ function App() {
 			<FloatingSearchIcon searchResults={handleSearchResults} />
 		</>
 	);
-}
+};
 
 export default App;

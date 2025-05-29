@@ -1,6 +1,6 @@
 // filepath: /Users/theodore_papadimitriou/Code/React_Projects/react_api_demo/server/middleware/authMiddleware.js
-const jwt = require("jsonwebtoken");
-const User = require("../db/userModel");
+import jwt from "jsonwebtoken";
+import User from "../db/userModel.mjs";
 
 const protect = async (req, res, next) => {
 	let token;
@@ -33,4 +33,4 @@ const protect = async (req, res, next) => {
 	}
 };
 
-module.exports = { protect };
+export { protect };

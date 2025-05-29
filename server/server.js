@@ -1,16 +1,19 @@
-const express = require("express");
-const cors = require("cors");
-const config = require("./config/config");
-const bodyParser = require("body-parser");
-const speakerRoutes = require("./routes/api/speakerRoutes");
-const userRoutes = require("./routes/api/userRoutes");
-const errorHandler = require("./middleware/errorHandler");
-const connection = require("./config/mongoConfig");
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import errorHandler from "./middleware/errorHandler.mjs";
+import dbConnection from "./config/mongoConfig.mjs";
+import config from "./config/config.mjs";
+
+// Import routes
+// Note: You'll need to update these files to ES Modules too
+import speakerRoutes from "./routes/api/speakerRoutes.mjs";
+import userRoutes from "./routes/api/userRoutes.mjs";
 
 // const {dropDB} = require('./config/database');
 
 const app = express();
-connection();
+dbConnection();
 
 //middleware
 //CORS (Cross-Origin Resource Sharing) in Express.js is a mechanism
