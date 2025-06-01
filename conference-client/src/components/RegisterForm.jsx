@@ -2,7 +2,9 @@ import { useState } from "react";
 import "../styles/registerForm.css";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { format } from "date-fns";
+
+import { addSpeakerAction } from "../actions/speakers.actions";
+import { useGlobalContext } from "../utilities/globalContex";
 
 const RegisterForm = ({ onRegistrationSuccess }) => {
 	const [formData, setFormData] = useState({
@@ -17,55 +19,28 @@ const RegisterForm = ({ onRegistrationSuccess }) => {
 		location: "",
 	});
 
+	const { userDetails } = useGlobalContext(); // Destructure the context values
+
 	const locations = ["Kiosk 1", "Kiosk 2", "Kiosk 3"];
 
 	const handleSubmit = async (event) => {
 		//add toast message
 
 		event.preventDefault(); // Prevent the default behavior that refreshes the page and clears the form
-		try {
-			const response = await fetch("http://localhost:4000/api/speakers", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json", //!!!!!!!!!!!!!!!!!!!!!!
-					authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
-				},
-				body: JSON.stringify({
-					name: formData.name,
-					bio: formData.bio,
-					email: formData.email,
-					topic: formData.topic,
-					description: formData.description,
-					date: formData.date ? format(formData.date, "yyyy-MM-dd") : null, // Format the date to YYYY-MM-DD
+		addSpeakerAction(formData);
 
-					time: formData.time,
-					duration: parseInt(formData.duration),
-					location: formData.location,
-				}),
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			const data = await response.json();
-			console.log("Success:", data);
-
-			onRegistrationSuccess(); //to update the registered speakers list
-			handleReset(); // Reset form after successful submission
-		} catch (error) {
-			console.error("Error:", error);
-			// Here you might want to show an error message to the user
-		}
+		onRegistrationSuccess(); //to update the registered speakers list
+		handleReset(); // Reset form after successful submission
 
 		console.log(formData);
 	};
 
-	function handleInputChange(idetifier, value) {
+	const handleInputChange = (idetifier, value) => {
 		setFormData((prevValues) => ({ ...prevValues, [idetifier]: value }));
 		//  setEdited((prevEdited) => ({...prevEdited, [idetifier]: false }));
-	}
+	};
 
-	function handleReset() {
+	const handleReset = () => {
 		setFormData({
 			name: "",
 			bio: "",
@@ -77,14 +52,14 @@ const RegisterForm = ({ onRegistrationSuccess }) => {
 			duration: "",
 			location: "",
 		});
-	}
+	};
 
 	return (
 		<div className="form-card">
 			<div className="user-name">
-				<h2>Organizer: {localStorage.getItem("userName")}</h2>
-				<h3>Email: {localStorage.getItem("userEmail")}</h3>
-				<h3>Role: {localStorage.getItem("userRole")}</h3>
+				<h2>Organizer: {userDetails.userName}</h2>
+				<h3>Email: {userDetails.email}</h3>
+				<h3>Role: {userDetails.role}</h3>
 			</div>
 			<form onSubmit={handleSubmit}>
 				<div className="form-content">

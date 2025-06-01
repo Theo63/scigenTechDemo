@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../styles/registeredSpeakers.css";
+import { deleteSpeakerAction } from "../actions/speakers.actions";
 
 const RegisteredSpeakers = ({
 	speakers,
@@ -13,18 +14,7 @@ const RegisteredSpeakers = ({
 
 	const handleSpeakerDelete = async (id) => {
 		try {
-			const response = await fetch(
-				`http://localhost:4000/api/speakers/${id}`,
-				{
-					headers: {
-						authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
-					},
-					method: "DELETE",
-				}
-			);
-			if (!response.ok) {
-				throw new Error(`Failed to delete speaker (${response.status})`);
-			}
+			await deleteSpeakerAction(id); // Call the action to delete the speaker
 			setSpeakers(speakers.filter((speaker) => speaker._id !== id));
 			setSearchResults(
 				searchResults.filter((speaker) => speaker._id !== id)
@@ -95,6 +85,9 @@ const RegisteredSpeakers = ({
 							searchResults.map((speaker) => (
 								<div key={speaker._id} className="speaker-item">
 									<h3>{speaker.name}</h3>
+									<p>
+										<strong>email:</strong> {speaker.email}
+									</p>
 									<p>
 										<strong>Topic:</strong> {speaker.topic}
 									</p>

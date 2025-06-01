@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/floatingButton.css";
 import searchIcon from "../assets/search.png";
+import { searchSpeakersAction } from "../actions/speakers.actions";
 
 const FloatingSearch = ({ searchResults }) => {
 	const [isPressed, setIsPressed] = useState(false);
@@ -8,26 +9,7 @@ const FloatingSearch = ({ searchResults }) => {
 
 	const handleSearch = async (event) => {
 		if (event.key === "Enter") {
-			try {
-				const response = await fetch(
-					`http://localhost:4000/api/speakers/search?name=${searchTerm}`,
-					{
-						headers: {
-							authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
-						},
-						method: "GET",
-					}
-				);
-				if (!response.ok) {
-					throw new Error(`Search failed (${response.status})`);
-				}
-				const data = await response.json();
-				searchResults(data); // calling parent component function to pass search results
-				// console.log('Search results:', data);
-				setIsPressed(false);
-			} catch (error) {
-				console.error("Search error:", error);
-			}
+			searchSpeakersAction({ searchTerm, searchResults });
 		}
 	};
 

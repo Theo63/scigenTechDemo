@@ -1,53 +1,55 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import RegisterForm from "./components/RegisterForm";
+import RegisterForm from "./components/registerForm";
 import RegisteredSpeakers from "./components/RegisteredSpeakers";
 import FloatingSearchIcon from "./components/floatingSearch";
 import logo from "./assets/logo.png";
 import logoutIcon from "./assets/logout.png";
 import AuthForm from "./components/AuthForm";
+import { fetchSpeakersAction } from "./actions/speakers.actions";
+import { useGlobalContext } from "./utilities/globalContex";
+import { whoAmI } from "./actions/users.actions";
 
 const App = () => {
 	const [loading, setLoading] = useState(true);
-
 	const [searchResults, setSearchResults] = useState([]);
 	const [showSearchResults, setShowSearchResults] = useState(false);
-
 	const [speakers, setSpeakers] = useState([]);
-
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const { setUserDetails } = useGlobalContext(); // Destructure the context values !!!!!
 
 	useEffect(() => {
 		const token = localStorage.getItem("token"); //on refresh without this the is authenticated state will be false and the user will be logged out
 		if (token) {
 			setIsAuthenticated(true);
-			fetchSpeakers(); // Fetch speakers if token is present
+			fetchSpeakersAction({ setSpeakers, setLoading }); // Fetch speakers if token is present
+			whoAmI({ setUserDetails }); // Fetch user details if token is present
 		} else {
 			setIsAuthenticated(false);
 			setLoading(false); // Set loading to false if no token is present
 		}
 	}, [isAuthenticated]); // useEffect to check if the user is authenticated and fetch speakers !!!!!!!!!!!!!!!
 
-	const fetchSpeakers = async () => {
-		try {
-			setLoading(true);
-			const response = await fetch("http://localhost:4000/api/speakers", {
-				method: "GET",
-				headers: {
-					authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
-				},
-			});
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-			const data = await response.json();
-			setSpeakers(data);
-		} catch (error) {
-			setError(error.message); // Store error message instead of error object
-		} finally {
-			setLoading(false);
-		}
-	};
+	// const fetchSpeakers = async () => {
+	// 	try {
+	// 		setLoading(true);
+	// 		const response = await fetch("http://localhost:4000/api/speakers", {
+	// 			method: "GET",
+	// 			headers: {
+	// 				authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
+	// 			},
+	// 		});
+	// 		if (!response.ok) {
+	// 			throw new Error(`HTTP error! status: ${response.status}`);
+	// 		}
+	// 		const data = await response.json();
+	// 		setSpeakers(data);
+	// 	} catch (error) {
+	// 		setError(error.message); // Store error message instead of error object
+	// 	} finally {
+	// 		setLoading(false);
+	// 	}
+	// };
 
 	const handleSearchResults = (results) => {
 		setSearchResults(results);
@@ -82,7 +84,14 @@ const App = () => {
 					<img src={logoutIcon} alt="Logout" />
 				</button>
 			</div>
-			<RegisterForm onRegistrationSuccess={fetchSpeakers} />
+			<RegisterForm
+				onRegistrationSuccess={() =>
+					fetchSpeakersAction({
+						setSpeakers,
+						setLoading,
+					})
+				}
+			/>
 			<h2>Registered Speakers</h2>
 			<RegisteredSpeakers
 				speakers={speakers}

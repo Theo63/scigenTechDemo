@@ -3,6 +3,7 @@ import "../styles/authForm.css"; // Import your CSS styles
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../styles/authForm.css"; // Import your CSS styles
+import { registerLoginUser } from "../actions/users.actions"; // Import the action to handle user registration/login
 
 const AuthForm = ({ onAuthSuccess }) => {
 	const [isLogin, setIsLogin] = useState(true); // Track whether it's login or signup
@@ -24,38 +25,43 @@ const AuthForm = ({ onAuthSuccess }) => {
 		const endpoint = isLogin
 			? "http://localhost:4000/api/users/login"
 			: "http://localhost:4000/api/users/register";
-		try {
-			const response = await fetch(endpoint, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				}, //the type of data we are sending is JSON
-				body: JSON.stringify(formData),
-			});
+		let errorData = {};
+		registerLoginUser(endpoint, onAuthSuccess, formData, errorData);
+		// try {
+		// 	const response = await fetch(endpoint, {
+		// 		method: "POST",
+		// 		headers: {
+		// 			"Content-Type": "application/json",
+		// 		}, //the type of data we are sending is JSON
+		// 		body: JSON.stringify(formData),
+		// 	});
 
-			if (response.ok) {
-				const data = await response.json();
-				onAuthSuccess(data.token); // Pass the token to App component as token
-				localStorage.setItem("token", data.token); // Store token in local storage
-				localStorage.setItem("userName", data.name);
-				localStorage.setItem("userEmail", data.email);
-				localStorage.setItem("userRole", data.role);
-				// setUserDetails({
-				// 	userName: data.name,
-				// 	mail: data.email,
-				// 	role: data.role,
-				// }); //global context store BUT LOSES DETAILS ON REFRESH
-			} else {
-				// Handle error
-				const errorData = await response.json();
-				toast(
-					errorData.message ||
-						"Authentication failed. Please check your credentials."
-				);
-				console.error("Authentication failed:", errorData);
-			}
-		} catch (error) {
-			console.error("Error:", error);
+		// 	if (response.ok) {
+		// 		const data = await response.json();
+		// 		onAuthSuccess(data.token); // Pass the token to App component as token
+		// 		localStorage.setItem("token", data.token); // Store token in local storage
+		// 		localStorage.setItem("userName", data.name);
+		// 		localStorage.setItem("userEmail", data.email);
+		// 		localStorage.setItem("userRole", data.role);
+		// 		// setUserDetails({
+		// 		// 	userName: data.name,
+		// 		// 	mail: data.email,
+		// 		// 	role: data.role,
+		// 		// }); //global context store BUT LOSES DETAILS ON REFRESH
+		// 	} else {
+		// 		// Handle error
+		// 		const errorData = await response.json();
+
+		// 		console.error("Authentication failed:", errorData);
+		// 	}
+		// } catch (error) {
+		// 	console.error("Error:", error);
+		// }
+		if (errorData) {
+			toast(
+				errorData.message ||
+					"Authentication failed. Please check your credentials."
+			);
 		}
 	};
 
