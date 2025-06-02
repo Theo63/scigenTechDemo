@@ -3,13 +3,23 @@ import "../styles/floatingButton.css";
 import searchIcon from "../assets/search.png";
 import { searchSpeakersAction } from "../actions/speakers.actions";
 
-const FloatingSearch = ({ searchResults }) => {
+const FloatingSearch = ({ searchResultsDisplay }) => {
 	const [isPressed, setIsPressed] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 
+	const searchSpeakers = async (searchTerm) => {
+		try {
+			const data = await searchSpeakersAction(searchTerm);
+
+			searchResultsDisplay(data);
+		} catch (error) {
+			console.error("Error searching speakers:", error);
+		}
+	};
+
 	const handleSearch = async (event) => {
 		if (event.key === "Enter") {
-			searchSpeakersAction({ searchTerm, searchResults });
+			searchSpeakers(searchTerm);
 		}
 	};
 

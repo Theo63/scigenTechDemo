@@ -19,9 +19,8 @@ export const deleteSpeakerAction = async (speakerId) => {
 	}
 };
 
-export const fetchSpeakersAction = async ({ setSpeakers, setLoading }) => {
+export const fetchSpeakersAction = async () => {
 	try {
-		setLoading(true);
 		const response = await fetch("http://localhost:4000/api/speakers", {
 			method: "GET",
 			headers: {
@@ -32,22 +31,20 @@ export const fetchSpeakersAction = async ({ setSpeakers, setLoading }) => {
 			throw new Error(`HTTP error! status: ${response.status}`);
 		}
 		const data = await response.json();
-		setSpeakers(data); // Set the fetched speakers in the state
-		return response.status; // Return the fetched speakers
+		console.log("Fetched speakers:"); // Log the fetched speakers for debugging
+		return data;
 	} catch (error) {
 		throw new Error(`Error fetching speakers: ${error.message}`);
-	} finally {
-		setLoading(false); //  loading is set to false after fetching
 	}
 };
 
-export const searchSpeakersAction = async ({ searchTerm, searchResults }) => {
+export const searchSpeakersAction = async (searchTerm) => {
 	try {
 		const response = await fetch(
 			`http://localhost:4000/api/speakers/search?name=${searchTerm}`,
 			{
 				headers: {
-					authorization: `Bearer ${localStorage.getItem("token")}`, // Include token in the request headers
+					authorization: `Bearer ${localStorage.getItem("token")}`,
 				},
 				method: "GET",
 			}
@@ -56,8 +53,8 @@ export const searchSpeakersAction = async ({ searchTerm, searchResults }) => {
 			throw new Error(`Search failed (${response.status})`);
 		}
 		const data = await response.json();
-		searchResults(data); // calling parent component function to pass search results
-		return response.status; // Return the search results
+
+		return data;
 	} catch (error) {
 		throw new Error(`Search error: ${error.message}`);
 	}

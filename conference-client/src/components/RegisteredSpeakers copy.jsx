@@ -74,70 +74,64 @@ const RegisteredSpeakers = ({
 				)}
 			</div>
 
-			{searchResults &&
-				showSearchResults &&
-				(console.log("searchResults to render", searchResults),
-				(
-					<div className="search-result-overlay" onClick={onCloseSearch}>
-						<div
-							className="search-result-container"
-							onClick={(e) => e.stopPropagation()}>
-							{/* clicking the container will not trigger the 
+			{searchResults && showSearchResults && (
+				<div className="search-result-overlay" onClick={onCloseSearch}>
+					<div
+						className="search-result-container"
+						onClick={(e) => e.stopPropagation()}>
+						{/* clicking the container will not trigger the 
                         onCloseSearch because of the stopPropagation */}
-							{Array.isArray(searchResults) &&
-								searchResults.map((speaker) => (
-									<div key={speaker._id} className="speaker-item">
-										<h3>{speaker.name}</h3>
+						{Array.isArray(searchResults) &&
+							searchResults.map((speaker) => (
+								<div key={speaker._id} className="speaker-item">
+									<h3>{speaker.name}</h3>
+									<p>
+										<strong>Topic:</strong> {speaker.topic}
+									</p>
+									<p>
+										<strong>Date:</strong> {speaker.date}
+									</p>
+									<p>
+										<strong>Time:</strong> {speaker.time}
+									</p>
+									<p>
+										<strong>Duration:</strong> {speaker.duration}{" "}
+										minutes
+									</p>
+									<p>
+										<strong>Location:</strong> {speaker.location}
+									</p>
+									{speaker.bio && (
 										<p>
-											<strong>email:</strong> {speaker.email}
+											<strong>Bio:</strong> {speaker.bio}
 										</p>
+									)}
+									{speaker.description && (
 										<p>
-											<strong>Topic:</strong> {speaker.topic}
+											<strong>Description:</strong>{" "}
+											{speaker.description}
 										</p>
-										<p>
-											<strong>Date:</strong> {speaker.date}
-										</p>
-										<p>
-											<strong>Time:</strong> {speaker.time}
-										</p>
-										<p>
-											<strong>Duration:</strong> {speaker.duration}{" "}
-											minutes
-										</p>
-										<p>
-											<strong>Location:</strong> {speaker.location}
-										</p>
-										{speaker.bio && (
-											<p>
-												<strong>Bio:</strong> {speaker.bio}
-											</p>
-										)}
-										{speaker.description && (
-											<p>
-												<strong>Description:</strong>{" "}
-												{speaker.description}
-											</p>
-										)}
-										<div>
-											<button
-												type="button"
-												onClick={() =>
-													handleSpeakerDelete(speaker._id)
-												}
-												className="delete-button">
-												Delete Speaker
-											</button>
-											{/* <button type="button" 
+									)}
+									<div>
+										<button
+											type="button"
+											onClick={() =>
+												handleSpeakerDelete(speaker._id)
+											}
+											className="delete-button">
+											Delete Speaker
+										</button>
+										{/* <button type="button" 
                                         onClick={onCloseSearch}
                                         className="delete-button">
                                     Exit search
                                 </button> */}
-										</div>
 									</div>
-								))}
-						</div>
+								</div>
+							))}
 					</div>
-				))}
+				</div>
+			)}
 		</>
 	);
 };

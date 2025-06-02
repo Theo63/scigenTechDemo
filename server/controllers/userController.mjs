@@ -56,14 +56,10 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
 	try {
 		const { email, password } = req.body;
-
-		const user = await User.findOne({ email }); // Find user by email from mongoDB model
+		console.log("Login attempt with email:", email, password);
+		const user = await User.findOne({ email });
+		console.log("User found:", user);
 		if (user && (await bcrypt.compare(password, user.password))) {
-			// Check if password matches
-			// const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-			//     expiresIn: "1h",
-			// });
-			// res.setHeader("Authorization", `Bearer ${token}`);
 			res.status(200).json({
 				_id: user._id,
 				name: user.name,

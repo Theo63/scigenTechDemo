@@ -11,10 +11,8 @@ const API_URL = "http://localhost:4000/api/users";
 // values of the useGlobalContext custom hook.
 // in userEffect in App.jsx, we call whoAmI to fetch user details and update the context.
 // the userDetails after are available in any component.
-export const whoAmI = async ({ userDetails, setUserDetails }) => {
+export const whoAmI = async (token) => {
 	try {
-		const token = localStorage.getItem("token");
-
 		if (!token) {
 			throw new Error("No authentication token found");
 		}
@@ -35,57 +33,42 @@ export const whoAmI = async ({ userDetails, setUserDetails }) => {
 		const userData = await response.json();
 
 		// Update global context with user details
-		setUserDetails({
-			userName: userData.name,
-			email: userData.email,
-			role: userData.role,
-			userId: userData._id,
-		});
+		// setUserDetails({
+		// 	userName: userData.name,
+		// 	email: userData.email,
+		// 	role: userData.role,
+		// 	userId: userData._id,
+		// });
 
-		return response.ok;
+		return userData;
 	} catch (error) {
 		console.error("whoAmI error:", error);
 		throw error;
 	}
 };
 
-export const registerLoginUser = async (
-	endpoint,
-	onAuthSuccess,
-	userData,
-	errorData
-) => {
+export const registerLoginUser = async ({ endpoint, formData }) => {
 	try {
 		const response = await fetch(endpoint, {
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
 			},
-			body: JSON.stringify(userData),
+			body: JSON.stringify(formData),
 		});
-
-		if (response.ok) {
-			const data = await response.json();
-			onAuthSuccess(data.token); // Pass the token to App component as token
-			localStorage.setItem("token", data.token); // Store token in local storage
-			localStorage.setItem("userName", data.name);
-			localStorage.setItem("userEmail", data.email);
-			localStorage.setItem("userRole", data.role);
-
-			return response.ok; // Return true if registration/login was successful
-		} else {
-			const errorData = await response.json();
-			throw new Error(errorData.message || "Failed to register user");
+		if (!response.ok) {
+			const errorText = await response.text(); // Read the response as text
+			throw new Error(errorText || `HTTP error! status: ${response.status}`);
 		}
+		const data = response.json();
+		console.log("Register/Login user data:", data);
+		return data;
 	} catch (error) {
 		console.error("Register error:", error);
 		throw error;
 	}
 };
 
-/**
- * Logs out the current user
- */
 export const logoutUser = () => {
 	localStorage.removeItem("token");
 	localStorage.removeItem("userName");

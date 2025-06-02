@@ -19,50 +19,39 @@ const AuthForm = ({ onAuthSuccess }) => {
 			[identifier]: value,
 		});
 	};
+	const authendicationController = async ({ endpoint, formData }) => {
+		try {
+			console.log("Endpoint:", endpoint); // Debugging
+			const userAuthResponse = await registerLoginUser({
+				endpoint,
+				formData,
+			});
+			console.log("userAuthResponse", userAuthResponse);
+			if (userAuthResponse && userAuthResponse.token) {
+				localStorage.setItem("token", userAuthResponse.token); // Store the token
+				onAuthSuccess();
+			} else {
+				toast("Authentication failed. Please check your credentials.");
+			}
+		} catch (error) {
+			console.error("Authentication error:", error);
+			toast("Authentication failed. Please try again.");
+		}
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const endpoint = isLogin
 			? "http://localhost:4000/api/users/login"
 			: "http://localhost:4000/api/users/register";
-		let errorData = {};
-		registerLoginUser(endpoint, onAuthSuccess, formData, errorData);
-		// try {
-		// 	const response = await fetch(endpoint, {
-		// 		method: "POST",
-		// 		headers: {
-		// 			"Content-Type": "application/json",
-		// 		}, //the type of data we are sending is JSON
-		// 		body: JSON.stringify(formData),
-		// 	});
-
-		// 	if (response.ok) {
-		// 		const data = await response.json();
-		// 		onAuthSuccess(data.token); // Pass the token to App component as token
-		// 		localStorage.setItem("token", data.token); // Store token in local storage
-		// 		localStorage.setItem("userName", data.name);
-		// 		localStorage.setItem("userEmail", data.email);
-		// 		localStorage.setItem("userRole", data.role);
-		// 		// setUserDetails({
-		// 		// 	userName: data.name,
-		// 		// 	mail: data.email,
-		// 		// 	role: data.role,
-		// 		// }); //global context store BUT LOSES DETAILS ON REFRESH
-		// 	} else {
-		// 		// Handle error
-		// 		const errorData = await response.json();
-
-		// 		console.error("Authentication failed:", errorData);
-		// 	}
-		// } catch (error) {
-		// 	console.error("Error:", error);
-		// }
-		if (errorData) {
-			toast(
-				errorData.message ||
-					"Authentication failed. Please check your credentials."
-			);
-		}
+		authendicationController({
+			endpoint,
+			formData: {
+				name: isLogin ? "" : formData.name,
+				email: formData.email,
+				password: formData.password,
+			},
+		});
 	};
 
 	return (
